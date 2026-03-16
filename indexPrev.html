@@ -1,0 +1,105 @@
+<html>
+
+<head>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-htmlmesh@2.7.0/build/aframe-html.min.js"></script>
+  <script src="https://unpkg.com/@c-frame/aframe-physics-system@4.2.3/dist/aframe-physics-system.min.js"></script>
+
+  <script type="module" src="js/main.js"></script>
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.20.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.20.0/mapbox-gl.js"></script>
+  <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: relative;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <a-scene physics>
+    <div id="my-panel" style="
+    width: 256px;
+    height: 256px;
+    background: #ffffff;">
+      <div id="maps"></div>
+      <p id="descriptionText" style="margin: 0; color: #aaa; font-size: 16px;">
+        This <strong style="color:#7c8fe8">div</strong> is rendered on a 3D plane.
+      </p>
+      <button onclick="console.log(0)" style="display: block;">Click me</button>
+    </div>
+
+    <a-entity id="rig">
+      <a-camera id="camera" cursor="rayOrigin: mouse" raycaster="objects: .clickable, [html]"></a-camera>
+    </a-entity>
+
+    <a-sphere color="black" radius="0.01" id="cursor" material="shader:flat" visible="false"></a-sphere>
+    <a-box position="-1 4 -3" rotation="0 45 0" color="#4CC3D9" class="clickable" dynamic-body></a-box>
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" static-body></a-plane>
+
+    <a-entity text="value: Hello, A-Frame; color: #FAFAFA; width: 5; anchor: align" position="-0.9 0.2 -3"
+      scale="1.5 1.5 1.5"></a-entity>
+
+    <a-entity html="html:#my-panel;cursor:#cursor;" position="0 1.5 -0.5" rotation="0 0 0"></a-entity>
+
+
+    <!--a-sky color="#000000"></a-sky-->
+  </a-scene>
+
+  <div id="map"></div>
+
+  <script>
+    document.querySelector('#descriptionText').innerHTML=JSON.stringify(document.querySelector('#camera').getAttribute("rotation"));
+    console.log(JSON.stringify(document.querySelector('#camera').getAttribute("rotation")));
+    //on recive coordinates - get camera rot
+    
+    /*document.querySelector('#descriptionText').innerHTML="TRY";
+    // Rotate rig so world -Z faces true North regardless of device orientation.
+    // heading = degrees clockwise from North → rig.rotation.y = heading
+ 
+    let locked = false;
+ 
+    function onOrientation(e) {
+      document.querySelector('#descriptionText').innerHTML="TRY1";
+      const heading = e.webkitCompassHeading   // iOS
+        ?? (360 - (e.alpha ?? 0)) % 360;       // Android
+ 
+      if (!locked) {
+        locked = true;
+        //document.getElementById('rig').setAttribute('rotation', `0 ${heading} 0`);
+
+        document.querySelector('#descriptionText').innerHTML=heading;
+      }
+    }
+ 
+    // iOS 13+ permission
+    if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(s => {
+        if (s === 'granted'){
+          document.querySelector('#descriptionText').innerHTML="Subscribe";
+          window.addEventListener('deviceorientationabsolute', onOrientation, true);
+        }
+      });
+    } else {
+      window.addEventListener('deviceorientationabsolute', onOrientation, true);
+      window.addEventListener('deviceorientation', onOrientation, true);
+    }*/
+  </script>
+
+</body>
+
+</html>
