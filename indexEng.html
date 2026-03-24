@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ParfumeTown — Perfume House</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --gold-dark: #8B6914;
+    --bg: #0A0806;
+    --bg-2: #120F0A;
+    --bg-3: #1C1610;
+    --text: #F5EDD8;
+    --text-muted: #9E8E72;
+    --border: rgba(201,168,76,0.2);
+    --border-hover: rgba(201,168,76,0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,8,6,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  nav { display: flex; gap: 2.5rem; align-items: center; }
+
+  nav a {
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.3s;
+  }
+
+  nav a:hover { color: var(--gold); }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    padding: 0.5rem 1.2rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .nav-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+    transition: all 0.3s;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-desc {
+    max-width: 520px;
+    margin: 0 auto 3rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s forwards;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 1rem 2.5rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.4s;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s forwards;
+  }
+
+  .hero-cta:hover {
+    background: var(--gold);
+    color: var(--bg);
+  }
+
+  .hero-cta::after {
+    content: '→';
+    transition: transform 0.3s;
+  }
+
+  .hero-cta:hover::after { transform: translateX(4px); }
+
+  .scroll-line {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.2s forwards;
+  }
+
+  .scroll-line span {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .scroll-line::after {
+    content: '';
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: lineGrow 2s 1.5s infinite;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    text-align: center;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    margin-bottom: 4rem;
+  }
+
+  .section-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+  }
+
+  .section-header p {
+    max-width: 480px;
+    margin: 1rem auto 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  /* PRODUCTS */
+  .products-section {
+    padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1280px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+  }
+
+  .product-card {
+    background: var(--bg-2);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.4s;
+  }
+
+  .product-card:hover { background: var(--bg-3); }
+
+  .product-img-wrap {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-3);
+  }
+
+  .product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: sepia(20%) brightness(0.85);
+  }
+
+  .product-card:hover .product-img-wrap img {
+    transform: scale(1.06);
+    filter: sepia(10%) brightness(0.95);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    background: var(--gold);
+    color: var(--bg);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    z-index: 2;
+  }
+
+  .product-info {
+    padding: 1.5rem 1.75rem 1.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .product-number {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .product-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  .product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    color: var(--gold);
+    letter-spacing: 0.03em;
+  }
+
+  .add-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+
+  .add-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.06);
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    margin: 0 auto 5rem;
+    max-width: 1280px;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider-icon {
+    color: var(--gold);
+    font-size: 1.2rem;
+    opacity: 0.6;
+  }
+
+  /* BANNER */
+  .banner {
+    margin: 0 clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vw, 7rem);
+    border: 1px solid var(--border);
+    padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem);
+    text-align: center;
+    background: var(--bg-2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 50% 100%, rgba(201,168,76,0.06), transparent);
+    pointer-events: none;
+  }
+
+  .banner h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+  }
+
+  .banner p {
+    color: var(--text-muted);
+    max-width: 420px;
+    margin: 0 auto 2rem;
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) 2rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    max-width: 1280px;
+    margin: 0 auto 3rem;
+  }
+
+  .footer-brand .logo {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .footer-brand p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 240px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col ul li { margin-bottom: 0.6rem; }
+
+  .footer-col ul li a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    transition: color 0.3s;
+    letter-spacing: 0.03em;
+  }
+
+  .footer-col ul li a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-bottom p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-social a {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lineGrow {
+    0%, 100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+  }
+
+  /* MOBILE NAV */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  .mobile-nav.open { display: flex; }
+
+  .mobile-nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+
+  .mobile-nav a:hover { color: var(--gold); }
+
+  .mobile-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  }
+
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .menu-toggle { display: flex; }
+    .products-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .hero h1 { letter-spacing: -0.02em; }
+  }
+
+  @media (max-width: 480px) {
+    .product-info { padding: 1.25rem; }
+    .banner { margin: 0 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="#" class="logo">ParfumeTown</a>
+  <nav>
+    <a href="#products">Collection</a>
+    <a href="#">Story</a>
+    <a href="#">Atelier</a>
+    <a href="#">Stockists</a>
+    <button class="nav-btn">Visit Boutique</button>
+  </nav>
+  <button class="menu-toggle" onclick="document.querySelector('.mobile-nav').classList.add('open')" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="mobile-nav">
+  <button class="mobile-close" onclick="document.querySelector('.mobile-nav').classList.remove('open')">×</button>
+  <a href="#products" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Collection</a>
+  <a href="#" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Story</a>
+  <a href="#" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Atelier</a>
+  <a href="#" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Stockists</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <p class="hero-eyebrow">Maison de Parfumerie · Est. 1987</p>
+    <h1>Wear the <em>Invisible</em><br>With Intention</h1>
+    <p class="hero-desc">Each fragrance is an act of memory — a landscape distilled into glass, a feeling made wearable. Our perfumers work only with the rarest raw materials.</p>
+    <a href="#products" class="hero-cta">Explore Collection</a>
+  </div>
+  <div class="scroll-line"><span>Scroll</span></div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="section-header">
+    <span class="section-tag">The Collection</span>
+    <h2>Eau de Parfum</h2>
+    <p>Six compositions, each a world unto itself. From the first breath to the final trace.</p>
+  </div>
+
+  <div class="products-grid">
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge">Bestseller</span>
+        <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=800" alt="Nuit Dorée perfume bottle" loading="lazy">
+      </div>
+      <div class="product-info">
+        <p class="product-number">No. 01</p>
+        <h3 class="product-name">Ocean di Gioia Armani</h3>
+        <p class="product-desc">Amber and black oud open into a heart of rose absolute and smoky incense — a fragrance for those who arrive after dark.</p>
+        <div class="product-footer">
+          <span class="product-price">$285</span>
+          <button class="add-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800" alt="Eau Sauvage Blanc perfume" loading="lazy">
+      </div>
+      <div class="product-info">
+        <p class="product-number">No. 02</p>
+        <h3 class="product-name">Eau Sauvage Blanc</h3>
+        <p class="product-desc">Sea salt and white cedarwood on a bed of musk — clean and cold as morning stone, with a trail of warm vetiver.</p>
+        <div class="product-footer">
+          <span class="product-price">$240</span>
+          <button class="add-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge">Limited</span>
+        <img src="https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=800" alt="Rose Cendres perfume" loading="lazy">
+      </div>
+      <div class="product-info">
+        <p class="product-number">No. 03</p>
+        <h3 class="product-name">Rose Cendres</h3>
+        <p class="product-desc">A burnt rose: the smoky aftermath of a garden fire, with Bulgarian rose and leather — startling, then impossibly tender.</p>
+        <div class="product-footer">
+          <span class="product-price">$320</span>
+          <button class="add-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1556228720-da8d5ab60f66?w=600&q=80" alt="Forêt Profonde perfume" loading="lazy">
+      </div>
+      <div class="product-info">
+        <p class="product-number">No. 04</p>
+        <h3 class="product-name">Forêt Profonde</h3>
+        <p class="product-desc">Damp earth, crushed fern, and fir balsam — the forest floor after rain, layered over a warming base of oakmoss and amber.</p>
+        <div class="product-footer">
+          <span class="product-price">$260</span>
+          <button class="add-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge">New</span>
+        <img src="https://images.unsplash.com/photo-1549019651-3b85eb44b5e2?w=600&q=80" alt="Ciel de Soie perfume" loading="lazy">
+      </div>
+      <div class="product-info">
+        <p class="product-number">No. 05</p>
+        <h3 class="product-name">Ciel de Soie</h3>
+        <p class="product-desc">White musks and iris powder float above ylang-ylang and sandalwood — a perfume like draped silk, weightless and sensuous.</p>
+        <div class="product-footer">
+          <span class="product-price">$275</span>
+          <button class="add-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1601295452898-b0b7e7a3e91e?w=600&q=80" alt="Épices du Monde perfume" loading="lazy">
+      </div>
+      <div class="product-info">
+        <p class="product-number">No. 06</p>
+        <h3 class="product-name">Épices du Monde</h3>
+        <p class="product-desc">Saffron and cardamom ignite over a core of patchouli and dark vanilla — the spice market at dusk, intoxicating and rich.</p>
+        <div class="product-footer">
+          <span class="product-price">$295</span>
+          <button class="add-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BANNER -->
+<div class="divider"><span class="divider-icon">✦</span></div>
+
+<div class="banner">
+  <h3>"A perfume is a poem<br>written in scent."</h3>
+  <p>We offer complimentary discovery sets — six 2ml samples of the full collection, so you may find your signature at your own pace.</p>
+  <a href="#" class="hero-cta">Order Discovery Set</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">AURUM</a>
+      <p>A house of perfume dedicated to rare ingredients, honest craftsmanship, and the enduring power of scent.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Collection</h4>
+      <ul>
+        <li><a href="#">Eau de Parfum</a></li>
+        <li><a href="#">Extrait</a></li>
+        <li><a href="#">Discovery Sets</a></li>
+        <li><a href="#">Candles</a></li>
+        <li><a href="#">Gift Wrapping</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Maison</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">The Perfumers</a></li>
+        <li><a href="#">Ingredients</a></li>
+        <li><a href="#">Atelier Tours</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="#">Stockists</a></li>
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 AURUM Parfumerie. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">Newsletter</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const original = this.textContent;
+      this.textContent = 'Added ✓';
+      this.style.borderColor = 'var(--gold)';
+      this.style.color = 'var(--gold)';
+      setTimeout(() => {
+        this.textContent = original;
+        this.style.borderColor = '';
+        this.style.color = '';
+      }, 1800);
+    });
+  });
+
+  document.querySelectorAll('.mobile-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelector('.mobile-nav').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
