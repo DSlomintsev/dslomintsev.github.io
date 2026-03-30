@@ -1,4 +1,5 @@
-{
+function addGoods(){
+    var itemsDataRaw = `{
   "Items": [
     {
       "Id": 0,
@@ -101,4 +102,30 @@
       "Base": "Ваніль, Тютюн"
     }
   ]
+}`;
+var productsEl = document.getElementById("productsContainer");
+var itemsData = JSON.parse(itemsDataRaw);
+
+itemsData.Items.forEach(itemData => {
+    productsEl.innerHTML+=`<div class="product-card">
+      <div class="product-img-wrap">
+        <span class="product-badge">Хіт продажів</span>
+        <img src="images/${itemData.Id}.jpg?auto=format&fit=crop&q=80&w=800" alt="Флакон парфумів Nuit Dorée" loading="lazy">
+      </div>
+      <div class="product-info">
+        <p class="product-number">№ 01</p>
+        <h3 class="product-name">${itemData.Name}</h3>
+        <p class="product-desc">${itemData.Base}</p>
+        <div class="product-footer">
+          <span class="product-price">$285</span>
+          <button class="add-btn">Скоро у продажу</button>
+        </div>
+      </div>
+    </div>`;
+});
+
 }
+
+window.addEventListener('load', function() {
+    addGoods();
+});
