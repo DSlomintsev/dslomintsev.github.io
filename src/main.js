@@ -117,7 +117,7 @@ itemsData.Items.forEach(itemData => {
         <h3 class="product-name">${itemData.Name}</h3>
         <p class="product-desc">${itemData.Base}</p>
         <div class="product-footer">
-          <span class="product-price">$285</span>
+          <span class="product-price">$15</span>
           <button class="add-btn">Скоро у продажу</button>
         </div>
       </div>
